@@ -25,6 +25,7 @@ class BookSerializer(serializers.ModelSerializer):
             "short_description",
             "full_description",
             "last_time_read",
+            "total_reading_time",
         )
         read_only_fields = ("id", "last_time_read")
 
@@ -35,7 +36,8 @@ class BookSerializer(serializers.ModelSerializer):
             "author": instance.author,
             "publication_year": instance.publication_year,
             "full_description": instance.full_description,
-            "last_time_read": instance.last_time_read
+            "last_time_read": instance.last_time_read,
+            "total_reading_time": instance.total_reading_time,
         }
 
     def create(self, validated_data) -> Book:

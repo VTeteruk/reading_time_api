@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django.db.migrations import serializer
 from rest_framework import viewsets, status
@@ -29,7 +29,11 @@ class BookViewSet(viewsets.ModelViewSet):
 
         if current_session:
             # If there is an ongoing session for the same book, end it
-            current_session.end_time = datetime.now()
+            current_session.end_time = timezone.now()
+
+            current_session.total_reading_time = (
+                current_session.end_time - current_session.start_time
+            )
             current_session.save()
             # Set last_time_read to the end time of the session
             book.last_time_read = current_session.end_time
@@ -46,11 +50,11 @@ class BookViewSet(viewsets.ModelViewSet):
 
         # If there is an ongoing session for a different book, end it
         if current_session:
-            current_session.end_time = datetime.now()
+            current_session.end_time = timezone.now()
             current_session.save()
 
         # Create a new reading session for the current book
-        ReadingSession.objects.create(user=user, book=book, start_time=datetime.now())
+        ReadingSession.objects.create(user=user, book=book, start_time=timezone.now())
         # Set last_time_read to None when starting a new session
         book.last_time_read = None
         book.save()
