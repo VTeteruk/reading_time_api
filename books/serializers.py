@@ -1,5 +1,6 @@
+from django.db.models import Sum
 from rest_framework import serializers
-from books.models import Book
+from books.models import Book, ReadingSession
 
 
 class BookListSerializer(serializers.ModelSerializer):
@@ -15,6 +16,8 @@ class BookListSerializer(serializers.ModelSerializer):
 
 
 class BookSerializer(serializers.ModelSerializer):
+    user_total_reading_time = serializers.SerializerMethodField()
+
     class Meta:
         model = Book
         fields = (
@@ -25,20 +28,21 @@ class BookSerializer(serializers.ModelSerializer):
             "short_description",
             "full_description",
             "last_time_read",
-            "total_reading_time",
+            "user_total_reading_time",
         )
         read_only_fields = ("id", "last_time_read")
 
     def to_representation(self, instance) -> dict:
-        return {
-            "id": instance.id,
-            "title": instance.title,
-            "author": instance.author,
-            "publication_year": instance.publication_year,
-            "full_description": instance.full_description,
-            "last_time_read": instance.last_time_read,
-            "total_reading_time": instance.total_reading_time,
-        }
+        data = super().to_representation(instance)
+        data.pop("short_description")
+        return data
+
+    def get_user_total_reading_time(self, instance) -> int | float:
+        user = self.context["request"].user
+        total_reading_time = ReadingSession.objects.filter(
+            user=user, book=instance, end_time__isnull=False
+        ).aggregate(total_time=Sum("total_reading_time"))["total_time"]
+        return total_reading_time.total_seconds() if total_reading_time else 0
 
     def create(self, validated_data) -> Book:
         """If full_description is not provided, use short_description"""

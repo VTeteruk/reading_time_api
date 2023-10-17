@@ -1,8 +1,5 @@
-import datetime
-
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Sum
 
 
 class Book(models.Model):
@@ -24,17 +21,6 @@ class Book(models.Model):
 
     def __str__(self) -> str:
         return self.title
-
-    @property
-    def total_reading_time(self) -> datetime:
-        """Calculate the total reading time for this book by summing the durations
-        of all related ReadingSession objects"""
-        total_time = self.sessions.filter(total_reading_time__isnull=False).aggregate(
-            total_time=Sum("total_reading_time")
-        )["total_time"]
-
-        # If there is no total time, return a default value of 0
-        return total_time or datetime.timedelta(0)
 
 
 class ReadingSession(models.Model):
