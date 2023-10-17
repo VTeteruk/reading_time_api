@@ -26,12 +26,6 @@ class ReadingSession(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True, blank=True)
 
-    def save(self, *args, **kwargs) -> None:
-        if self.end_time:
-            self.book.last_time_read = self.end_time
-            self.book.save()
-        super(ReadingSession, self).save(*args, **kwargs)
-
     def __str__(self) -> str:
         return f"{self.user.name} reads {self.book.title}"
 
