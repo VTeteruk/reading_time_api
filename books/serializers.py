@@ -45,3 +45,9 @@ class BookSerializer(serializers.ModelSerializer):
         if not validated_data.get("full_description"):
             validated_data["full_description"] = validated_data["short_description"]
         return Book.objects.create(**validated_data)
+
+
+class BookReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = set()

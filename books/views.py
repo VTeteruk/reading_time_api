@@ -1,3 +1,4 @@
+from django.db.models import Sum, Count
 from django.utils import timezone
 
 from django.db.migrations import serializer
@@ -6,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from books.models import Book, ReadingSession
-from books.serializers import BookSerializer, BookListSerializer
+from books.serializers import BookSerializer, BookListSerializer, BookReadSerializer
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -15,6 +16,8 @@ class BookViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> serializer:
         if self.action == "list":
             return BookListSerializer
+        if self.action == "read":
+            return BookReadSerializer
         return BookSerializer
 
     @action(detail=True, methods=["POST"], url_path="read")
@@ -63,3 +66,46 @@ class BookViewSet(viewsets.ModelViewSet):
             {"message": "Reading session started for the book"},
             status=status.HTTP_200_OK,
         )
+
+    @action(detail=False, methods=["GET"], url_path="user-stats")
+    def user_stats(self, request) -> Response:
+        user = request.user  # Get the current user
+
+        # Calculate the total reading time for the user
+        total_reading_time = ReadingSession.objects.filter(
+            user=user, end_time__isnull=False
+        ).aggregate(total_time=Sum("total_reading_time"))["total_time"]
+
+        # Calculate the total number of books read by the user, considering all sessions
+        total_books_read = (
+            ReadingSession.objects.filter(user=user, end_time__isnull=False)
+            .values("book")
+            .annotate(total_sessions=Count("book"))
+            .count()
+        )
+
+        # Find the current book being read (if any)
+        current_session = ReadingSession.objects.filter(
+            user=user, end_time__isnull=True
+        ).first()
+
+        # Find the last read book (if any)
+        last_read_session = (
+            ReadingSession.objects.filter(user=user, end_time__isnull=False)
+            .order_by("-end_time")
+            .first()
+        )
+        last_read_book = last_read_session.book if last_read_session else None
+
+        user_stats = {
+            "total_reading_time": total_reading_time.total_seconds()
+            if total_reading_time
+            else 0,
+            "total_books_read": total_books_read,
+            "current_book_being_read": current_session.book.title
+            if current_session
+            else None,
+            "last_read_book": last_read_book.title if last_read_book else None,
+        }
+
+        return Response(user_stats, status=status.HTTP_200_OK)
