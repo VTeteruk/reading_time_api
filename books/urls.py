@@ -1,3 +1,10 @@
-name = "books"
+from rest_framework import routers
 
-urlpatterns = []
+from books.views import BookViewSet
+
+app_name = "books"
+
+router = routers.DefaultRouter()
+router.register(r"books", BookViewSet)
+
+urlpatterns = router.urls
