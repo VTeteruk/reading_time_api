@@ -48,6 +48,8 @@ def user_stats(request) -> Response:
         if current_session
         else None,
         "last_read_book": last_read_book.title if last_read_book else None,
+        "total_reading_time_7_days": user.total_reading_time_week,
+        "total_reading_time_30_days": user.total_reading_time_month,
     }
 
     return Response(user_stats, status=status.HTTP_200_OK)
