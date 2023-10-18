@@ -59,8 +59,7 @@ ROOT_URLCONF = "time_reading_api.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates']
-        ,
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -127,15 +126,15 @@ STATIC_URL = "static/"
 
 # CELERY
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CELERY_BEAT_SCHEDULE = {
-    'daily_user_reading_stats': {
-        'task': 'users.tasks.collect_user_reading_stats',
-        'schedule': timedelta(days=1)
+    "daily_user_reading_stats": {
+        "task": "users.tasks.collect_user_reading_stats",
+        "schedule": timedelta(days=1),
     }
 }
 

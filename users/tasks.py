@@ -22,15 +22,27 @@ def collect_user_reading_stats() -> None:
         ).all()
 
         total_reading_time_week_seconds = sum(
-            (session.total_reading_time.total_seconds() for session in total_reading_time_week_sessions), 0
+            (
+                session.total_reading_time.total_seconds()
+                for session in total_reading_time_week_sessions
+            ),
+            0,
         )
 
         total_reading_time_month_seconds = sum(
-            (session.total_reading_time.total_seconds() for session in total_reading_time_month_sessions), 0
+            (
+                session.total_reading_time.total_seconds()
+                for session in total_reading_time_month_sessions
+            ),
+            0,
         )
 
-        total_reading_time_week_timedelta = timedelta(seconds=total_reading_time_week_seconds)
-        total_reading_time_month_timedelta = timedelta(seconds=total_reading_time_month_seconds)
+        total_reading_time_week_timedelta = timedelta(
+            seconds=total_reading_time_week_seconds
+        )
+        total_reading_time_month_timedelta = timedelta(
+            seconds=total_reading_time_month_seconds
+        )
 
         user.total_reading_time_week = total_reading_time_week_timedelta
         user.total_reading_time_month = total_reading_time_month_timedelta
