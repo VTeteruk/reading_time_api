@@ -2,11 +2,17 @@ from django.contrib.auth import get_user_model
 from django.db.models import Sum, Count
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from books.models import ReadingSession
 from users.models import User
 from users.serializers import UserSerializer
+
+
+class CreateUserView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (AllowAny,)
 
 
 @api_view(["GET"])
