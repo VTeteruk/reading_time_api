@@ -20,11 +20,15 @@ def collect_user_reading_stats() -> None:
             thirty_days_ago = timezone.now() - timedelta(days=30)
 
             total_reading_time_week_sessions = ReadingSession.objects.filter(
-                user=user, start_time__gte=seven_days_ago, end_time__isnull=False
+                user=user,
+                start_time__gte=seven_days_ago,
+                end_time__isnull=False,
             )
 
             total_reading_time_month_sessions = ReadingSession.objects.filter(
-                user=user, start_time__gte=thirty_days_ago, end_time__isnull=False
+                user=user,
+                start_time__gte=thirty_days_ago,
+                end_time__isnull=False,
             )
 
             total_reading_time_week_seconds = sum(

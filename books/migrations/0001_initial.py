@@ -27,7 +27,10 @@ class Migration(migrations.Migration):
                 ("publication_year", models.PositiveIntegerField()),
                 ("short_description", models.TextField()),
                 ("full_description", models.TextField(blank=True, null=True)),
-                ("last_time_read", models.DateTimeField(blank=True, null=True)),
+                (
+                    "last_time_read",
+                    models.DateTimeField(blank=True, null=True),
+                ),
             ],
         ),
         migrations.CreateModel(
@@ -44,7 +47,10 @@ class Migration(migrations.Migration):
                 ),
                 ("start_time", models.DateTimeField()),
                 ("end_time", models.DateTimeField(blank=True, null=True)),
-                ("total_reading_time", models.DurationField(blank=True, null=True)),
+                (
+                    "total_reading_time",
+                    models.DurationField(blank=True, null=True),
+                ),
                 (
                     "book",
                     models.ForeignKey(

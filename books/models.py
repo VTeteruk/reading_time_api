@@ -27,7 +27,9 @@ class ReadingSession(models.Model):
     user = models.ForeignKey(
         get_user_model(), related_name="users", on_delete=models.CASCADE
     )
-    book = models.ForeignKey(Book, related_name="sessions", on_delete=models.CASCADE)
+    book = models.ForeignKey(
+        Book, related_name="sessions", on_delete=models.CASCADE
+    )
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True, blank=True)
     total_reading_time = models.DurationField(null=True, blank=True)

@@ -45,7 +45,7 @@ def user_stats(request) -> Response:
     )
     last_read_book = last_read_session.book if last_read_session else None
 
-    user_stats = {
+    stats = {
         "total_reading_time": total_reading_time.total_seconds()
         if total_reading_time
         else 0,
@@ -58,7 +58,7 @@ def user_stats(request) -> Response:
         "total_reading_time_30_days": user.total_reading_time_month,
     }
 
-    return Response(user_stats, status=status.HTTP_200_OK)
+    return Response(stats, status=status.HTTP_200_OK)
 
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):

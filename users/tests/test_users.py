@@ -13,7 +13,7 @@ from users.models import User
 
 
 @pytest.fixture()
-def create_user() -> User:
+def created_user() -> User:
     return get_user_model().objects.create_user(
         username="test_user",
         first_name="test",
@@ -44,6 +44,14 @@ def test_create_user(client) -> None:
     user = get_user_model().objects.get(username=data["username"])
     assert user is not None
     assert user.first_name == "Test"
+
+
+@pytest.mark.django_db
+def test_unauthenticated_user(created_user, client) -> None:
+    url = reverse("users:user-details")
+    response = client.get(url, format="json")
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db

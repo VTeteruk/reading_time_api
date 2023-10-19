@@ -47,7 +47,9 @@ class BookSerializer(serializers.ModelSerializer):
     def create(self, validated_data) -> Book:
         """If full_description is not provided, use short_description"""
         if not validated_data.get("full_description"):
-            validated_data["full_description"] = validated_data["short_description"]
+            validated_data["full_description"] = validated_data[
+                "short_description"
+            ]
         return Book.objects.create(**validated_data)
 
 

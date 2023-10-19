@@ -6,7 +6,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from books.models import Book, ReadingSession
-from books.serializers import BookSerializer, BookListSerializer, BookReadSerializer
+from books.serializers import (
+    BookSerializer,
+    BookListSerializer,
+    BookReadSerializer,
+)
 
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -56,7 +60,9 @@ class BookViewSet(viewsets.ModelViewSet):
             current_session.save()
 
         # Create a new reading session for the current book
-        ReadingSession.objects.create(user=user, book=book, start_time=timezone.now())
+        ReadingSession.objects.create(
+            user=user, book=book, start_time=timezone.now()
+        )
         # Set last_time_read to None when starting a new session
         book.last_time_read = None
         book.save()
