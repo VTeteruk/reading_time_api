@@ -24,20 +24,24 @@ To get started with Reading Tracker, follow the instructions below:
 ### Installation
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/VTeteruk/reading_time_api.git
    ```
 2. Navigate to the project directory:
-
     ```bash
     cd reading-tracker/
     ```
-3. Build and start the Docker containers:
+3. Create and activate venv file:
+    ```bash
+    python -m venv venv
+    venv\Scripts\activate.bat
+    ```
+4. Fill `.env_sample` file and rename it to `.env`
+5. Build and start the Docker containers:
     ```bash
     docker-compose up --build
     ```
-4. Create user to get access for everything (web url):
+6. Create user to get access for everything (web url):
    ```bash
    http://localhost:8000/api/users/register
    http://localhost:8000/api/users/token
@@ -45,13 +49,13 @@ To get started with Reading Tracker, follow the instructions below:
 ___
 # API Endpoints
 Use this url to access the documentation:
-```bash
-http://localhost:8000/api/schema/swagger/
-```
+   ```bash
+   http://localhost:8000/api/schema/swagger/
+   ```
+
 ___
 # Running Tests
 To run the tests for Reading Tracker, use the following command:
-
-```bash
-pytest
-```
+   ```bash
+   pytest
+   ```
