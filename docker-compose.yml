@@ -1,0 +1,55 @@
+version: "3"
+services:
+    app:
+        build:
+            context: .
+        restart: on-failure
+        ports:
+            - "8000:8000"
+        volumes:
+          - ./:/app
+        command: >
+            sh -c "python manage.py migrate &&
+                   python manage.py runserver 0.0.0.0:8000"
+        env_file:
+            - .env
+        links:
+            - redis
+        networks:
+            - mynet
+
+    redis:
+        image: redis:latest
+        ports:
+            - "6379:6379"
+        networks:
+            - mynet
+
+    celery:
+        build:
+            context: .
+        command: celery -A time_reading_api worker --loglevel=info
+        volumes:
+          - ./:/app
+        depends_on:
+            - redis
+        env_file:
+            - .env
+        networks:
+            - mynet
+
+    celery-beat:
+        build:
+            context: .
+        command: celery -A time_reading_api beat --loglevel=info
+        volumes:
+          - ./:/app
+        depends_on:
+            - redis
+        env_file:
+            - .env
+        networks:
+            - mynet
+
+networks:
+    mynet:
