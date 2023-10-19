@@ -17,6 +17,7 @@ class CreateUserView(generics.CreateAPIView):
 
 @api_view(["GET"])
 def user_stats(request) -> Response:
+    """Show user's statistics"""
     user = request.user  # Get the current user
 
     # Calculate the total reading time for the user

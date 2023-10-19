@@ -25,6 +25,7 @@ class BookViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["POST"], url_path="read")
     def read(self, request, pk=None) -> Response:
+        """Start/Cancel book reading"""
         book = self.get_object()  # Get the book instance
         user = request.user  # Assuming you have a user profile
 
