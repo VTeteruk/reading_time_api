@@ -31,6 +31,3 @@ class ReadingSession(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True, blank=True)
     total_reading_time = models.DurationField(null=True, blank=True)
-
-    def __str__(self) -> str:
-        return f"{self.user.name} reads {self.book.title}"

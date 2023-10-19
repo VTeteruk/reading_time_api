@@ -10,9 +10,9 @@ from users.views import UserDetailView, user_stats, CreateUserView
 app_name = "users"
 
 urlpatterns = [
-    path("register/", CreateUserView.as_view(), name="register"),
-    path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("users/register/", CreateUserView.as_view(), name="register"),
+    path("users/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("users/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("users/me/", UserDetailView.as_view(), name="user-details"),
     path("users/reading_stats/", user_stats, name="reading-stats"),
 ]
